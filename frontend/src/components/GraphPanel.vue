@@ -2,7 +2,7 @@
   <div class="graph-panel">
     <div class="panel-header">
       <span class="panel-title">Graph Relationship Visualization</span>
-      <!-- Top Toolbar -->
+      <!-- 顶部工具栏 (Internal Top Right) -->
       <div class="header-tools">
         <button class="tool-btn" @click="$emit('refresh')" :disabled="loading" title="刷新图谱">
           <span class="icon-refresh" :class="{ 'spinning': loading }">↻</span>
@@ -15,11 +15,11 @@
     </div>
     
     <div class="graph-container" ref="graphContainer">
-      <!-- Graph Visualization -->
+      <!-- 图谱可视化 -->
       <div v-if="graphData" class="graph-view">
         <svg ref="graphSvg" class="graph-svg"></svg>
         
-        <!-- Building/Simulation Progress Hint -->
+        <!-- 构建中/模拟中提示 -->
         <div v-if="currentPhase === 1 || isSimulating" class="graph-building-hint">
           <div class="memory-icon-wrapper">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="memory-icon">
@@ -48,7 +48,7 @@
           </button>
         </div>
         
-        <!-- Node/Edge Detail Panel -->
+        <!-- 节点/边详情面板 -->
         <div v-if="selectedItem" class="detail-panel">
           <div class="detail-panel-header">
             <span class="detail-title">{{ selectedItem.type === 'node' ? 'Node Details' : 'Relationship' }}</span>
@@ -58,7 +58,7 @@
             <button class="detail-close" @click="closeDetailPanel">×</button>
           </div>
           
-          <!-- Node Details -->
+          <!-- 节点详情 -->
           <div v-if="selectedItem.type === 'node'" class="detail-content">
             <div class="detail-row">
               <span class="detail-label">Name:</span>
@@ -101,9 +101,9 @@
             </div>
           </div>
           
-          <!-- Edge Details -->
+          <!-- 边详情 -->
           <div v-else class="detail-content">
-            <!-- Self-loop Group Details -->
+            <!-- 自环组详情 -->
             <template v-if="selectedItem.data.isSelfLoopGroup">
               <div class="edge-relation-header self-loop-header">
                 {{ selectedItem.data.source_name }} - Self Relations
@@ -154,7 +154,7 @@
               </div>
             </template>
             
-            <!-- Regular Edge Details -->
+            <!-- 普通边详情 -->
             <template v-else>
               <div class="edge-relation-header">
                 {{ selectedItem.data.source_name }} → {{ selectedItem.data.name || 'RELATED_TO' }} → {{ selectedItem.data.target_name }}
@@ -213,7 +213,7 @@
       </div>
     </div>
 
-    <!-- Bottom Legend (Bottom Left) -->
+    <!-- 底部图例 (Bottom Left) -->
     <div v-if="graphData && entityTypes.length" class="graph-legend">
       <span class="legend-title">Entity Types</span>
       <div class="legend-items">
@@ -224,7 +224,7 @@
       </div>
     </div>
     
-    <!-- Edge Labels Toggle -->
+    <!-- 显示边标签开关 -->
     <div v-if="graphData" class="edge-labels-toggle">
       <label class="toggle-switch">
         <input type="checkbox" v-model="showEdgeLabels" />
@@ -251,26 +251,26 @@ const emit = defineEmits(['refresh', 'toggle-maximize'])
 const graphContainer = ref(null)
 const graphSvg = ref(null)
 const selectedItem = ref(null)
-const showEdgeLabels = ref(true) // Show edge labels by default
-const expandedSelfLoops = ref(new Set()) // Expanded self-loop items
-const showSimulationFinishedHint = ref(false) // Post-simulation hint
-const wasSimulating = ref(false) // Track previous simulation state
+const showEdgeLabels = ref(true) // 默认显示边标签
+const expandedSelfLoops = ref(new Set()) // 展开的自环项
+const showSimulationFinishedHint = ref(false) // 模拟结束后的提示
+const wasSimulating = ref(false) // 追踪之前是否在模拟中
 
-// Dismiss simulation finished hint
+// 关闭模拟结束提示
 const dismissFinishedHint = () => {
   showSimulationFinishedHint.value = false
 }
 
-// Watch isSimulating changes to detect simulation end
+// 监听 isSimulating 变化，检测模拟结束
 watch(() => props.isSimulating, (newValue, oldValue) => {
   if (wasSimulating.value && !newValue) {
-    // Transition from simulating to non-simulating, show finished hint
+    // 从模拟中变为非模拟状态，显示结束提示
     showSimulationFinishedHint.value = true
   }
   wasSimulating.value = newValue
 }, { immediate: true })
 
-// Toggle self-loop item expand/collapse state
+// 切换自环项展开/折叠状态
 const toggleSelfLoop = (id) => {
   const newSet = new Set(expandedSelfLoops.value)
   if (newSet.has(id)) {
@@ -281,11 +281,11 @@ const toggleSelfLoop = (id) => {
   expandedSelfLoops.value = newSet
 }
 
-// Calculate entity types for legend
+// 计算实体类型用于图例
 const entityTypes = computed(() => {
   if (!props.graphData?.nodes) return []
   const typeMap = {}
-  // Beautiful color palette
+  // 美观的颜色调色板
   const colors = ['#FF6B35', '#004E89', '#7B2D8E', '#1A936F', '#C5283D', '#E9724C', '#3498db', '#9b59b6', '#27ae60', '#f39c12']
   
   props.graphData.nodes.forEach(node => {
@@ -298,7 +298,7 @@ const entityTypes = computed(() => {
   return Object.values(typeMap)
 })
 
-// Format datetime
+// 格式化时间
 const formatDateTime = (dateStr) => {
   if (!dateStr) return ''
   try {
@@ -318,7 +318,7 @@ const formatDateTime = (dateStr) => {
 
 const closeDetailPanel = () => {
   selectedItem.value = null
-  expandedSelfLoops.value = new Set() // Reset expanded state
+  expandedSelfLoops.value = new Set() // 重置展开状态
 }
 
 let currentSimulation = null
@@ -328,7 +328,7 @@ let linkLabelBgRef = null
 const renderGraph = () => {
   if (!graphSvg.value || !props.graphData) return
   
-  // Stop previous simulation
+  // 停止之前的仿真
   if (currentSimulation) {
     currentSimulation.stop()
   }
@@ -349,7 +349,8 @@ const renderGraph = () => {
   
   if (nodesData.length === 0) return
 
-  // Prepare data
+  // Prep data
+  const nodeMap = {}
   nodesData.forEach(n => nodeMap[n.uuid] = n)
   
   const nodes = nodesData.map(n => ({
@@ -361,16 +362,16 @@ const renderGraph = () => {
   
   const nodeIds = new Set(nodes.map(n => n.id))
   
-  // Process edge data, calculate edge count and index between node pairs
+  // 处理边数据，计算同一对节点间的边数量和索引
   const edgePairCount = {}
-  const selfLoopEdges = {} // Self-loop edges grouped by node
+  const selfLoopEdges = {} // 按节点分组的自环边
   const tempEdges = edgesData
     .filter(e => nodeIds.has(e.source_node_uuid) && nodeIds.has(e.target_node_uuid))
   
-  // Count edges between node pairs and collect self-loop edges
+  // 统计每对节点之间的边数量，收集自环边
   tempEdges.forEach(e => {
     if (e.source_node_uuid === e.target_node_uuid) {
-      // Self-loop - collect into array
+      // 自环 - 收集到数组中
       if (!selfLoopEdges[e.source_node_uuid]) {
         selfLoopEdges[e.source_node_uuid] = []
       }
@@ -385,9 +386,9 @@ const renderGraph = () => {
     }
   })
   
-  // Track current edge index for each node pair
+  // 记录当前处理到每对节点的第几条边
   const edgePairIndex = {}
-  const processedSelfLoopNodes = new Set() // Processed self-loop nodes
+  const processedSelfLoopNodes = new Set() // 已处理的自环节点
   
   const edges = []
   
@@ -395,9 +396,9 @@ const renderGraph = () => {
     const isSelfLoop = e.source_node_uuid === e.target_node_uuid
     
     if (isSelfLoop) {
-      // Self-loop edge - only add one merged self-loop per node
+      // 自环边 - 每个节点只添加一条合并的自环
       if (processedSelfLoopNodes.has(e.source_node_uuid)) {
-        return // Already processed, skip
+        return // 已处理过，跳过
       }
       processedSelfLoopNodes.add(e.source_node_uuid)
       
@@ -427,19 +428,19 @@ const renderGraph = () => {
     const currentIndex = edgePairIndex[pairKey] || 0
     edgePairIndex[pairKey] = currentIndex + 1
     
-    // Check if edge direction matches standardized direction (source UUID < target UUID)
+    // 判断边的方向是否与标准化方向一致（源UUID < 目标UUID）
     const isReversed = e.source_node_uuid > e.target_node_uuid
     
-    // Calculate curvature: spread out for multiple edges, straight for single edge
+    // 计算曲率：多条边时分散开，单条边为直线
     let curvature = 0
     if (totalCount > 1) {
-      // Uniform curvature distribution for clear distinction
-      // Curvature range increases with edge count
+      // 均匀分布曲率，确保明显区分
+      // 曲率范围根据边数量增加，边越多曲率范围越大
       const curvatureRange = Math.min(1.2, 0.6 + totalCount * 0.15)
       curvature = ((currentIndex / (totalCount - 1)) - 0.5) * curvatureRange * 2
       
-      // Reverse curvature if edge direction is opposite to standard
-      // This ensures all edges are distributed in the same reference frame
+      // 如果边的方向与标准化方向相反，翻转曲率
+      // 这样确保所有边在同一参考系下分布，不会因方向不同而重叠
       if (isReversed) {
         curvature = -curvature
       }
@@ -463,14 +464,15 @@ const renderGraph = () => {
   })
     
   // Color scale
+  const colorMap = {}
   entityTypes.value.forEach(t => colorMap[t.name] = t.color)
   const getColor = (type) => colorMap[type] || '#999'
 
-  // Simulation - Dynamically adjust node spacing based on edge count
+  // Simulation - 根据边数量动态调整节点间距
   const simulation = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(edges).id(d => d.id).distance(d => {
-      // Dynamically adjust distance based on edge count between node pairs
-      // Base distance 150, add 40 for each additional edge
+      // 根据这对节点之间的边数量动态调整距离
+      // 基础距离 150，每多一条边增加 40
       const baseDistance = 150
       const edgeCount = d.pairTotal || 1
       return baseDistance + (edgeCount - 1) * 50
@@ -478,7 +480,7 @@ const renderGraph = () => {
     .force('charge', d3.forceManyBody().strength(-400))
     .force('center', d3.forceCenter(width / 2, height / 2))
     .force('collide', d3.forceCollide(50))
-    // Add center gravity to cluster independent node groups toward center
+    // 添加向中心的引力，让独立的节点群聚集到中心区域
     .force('x', d3.forceX(width / 2).strength(0.04))
     .force('y', d3.forceY(height / 2).strength(0.04))
   
@@ -494,21 +496,21 @@ const renderGraph = () => {
   // Links - 使用 path 支持曲线
   const linkGroup = g.append('g').attr('class', 'links')
   
-  // Calculate curved path
+  // 计算曲线路径
   const getLinkPath = (d) => {
     const sx = d.source.x, sy = d.source.y
     const tx = d.target.x, ty = d.target.y
     
-    // Detect self-loop
+    // 检测自环
     if (d.isSelfLoop) {
-      // Self-loop: draw an arc from node and back
+      // 自环：绘制一个圆弧从节点出发再返回
       const loopRadius = 30
-      // Start from right side of node, loop around
-      const x1 = sx + 8  // Start offset
+      // 从节点右侧出发，绕一圈回来
+      const x1 = sx + 8  // 起点偏移
       const y1 = sy - 4
-      const x2 = sx + 8  // End offset
+      const x2 = sx + 8  // 终点偏移
       const y2 = sy + 4
-      // Draw self-loop with arc (sweep-flag=1 clockwise)
+      // 使用圆弧绘制自环（sweep-flag=1 顺时针）
       return `M${x1},${y1} A${loopRadius},${loopRadius} 0 1,1 ${x2},${y2}`
     }
     
@@ -517,11 +519,11 @@ const renderGraph = () => {
       return `M${sx},${sy} L${tx},${ty}`
     }
     
-    // Calculate curve control point - dynamically adjust based on edge count and distance
+    // 计算曲线控制点 - 根据边数量和距离动态调整
     const dx = tx - sx, dy = ty - sy
     const dist = Math.sqrt(dx * dx + dy * dy)
-    // Offset perpendicular to line direction, calculated by distance ratio for visible curves
-    // More edges = larger offset ratio relative to distance
+    // 垂直于连线方向的偏移，根据距离比例计算，保证曲线明显可见
+    // 边越多，偏移量占距离的比例越大
     const pairTotal = d.pairTotal || 1
     const offsetRatio = 0.25 + pairTotal * 0.05 // 基础25%，每多一条边增加5%
     const baseOffset = Math.max(35, dist * offsetRatio)
@@ -533,14 +535,14 @@ const renderGraph = () => {
     return `M${sx},${sy} Q${cx},${cy} ${tx},${ty}`
   }
   
-  // Calculate curve midpoint (for label positioning)
+  // 计算曲线中点（用于标签定位）
   const getLinkMidpoint = (d) => {
     const sx = d.source.x, sy = d.source.y
     const tx = d.target.x, ty = d.target.y
     
-    // Detect self-loop
+    // 检测自环
     if (d.isSelfLoop) {
-      // Self-loop label position: right side of node
+      // 自环标签位置：节点右侧
       return { x: sx + 70, y: sy }
     }
     
@@ -548,7 +550,7 @@ const renderGraph = () => {
       return { x: (sx + tx) / 2, y: (sy + ty) / 2 }
     }
     
-    // Quadratic Bezier curve midpoint t=0.5
+    // 二次贝塞尔曲线的中点 t=0.5
     const dx = tx - sx, dy = ty - sy
     const dist = Math.sqrt(dx * dx + dy * dy)
     const pairTotal = d.pairTotal || 1
@@ -573,13 +575,13 @@ const renderGraph = () => {
     .attr('stroke-width', 1.5)
     .attr('fill', 'none')
     .style('cursor', 'pointer')
-      .on('click', (event, d) => {
+    .on('click', (event, d) => {
       event.stopPropagation()
-      // Reset previously selected edge styles
+      // 重置之前选中边的样式
       linkGroup.selectAll('path').attr('stroke', '#C0C0C0').attr('stroke-width', 1.5)
       linkLabelBg.attr('fill', 'rgba(255,255,255,0.95)')
       linkLabels.attr('fill', '#666')
-      // Highlight currently selected edge
+      // 高亮当前选中的边
       d3.select(event.target).attr('stroke', '#3498db').attr('stroke-width', 3)
       
       selectedItem.value = {
@@ -598,12 +600,12 @@ const renderGraph = () => {
     .style('cursor', 'pointer')
     .style('pointer-events', 'all')
     .style('display', showEdgeLabels.value ? 'block' : 'none')
-      .on('click', (event, d) => {
+    .on('click', (event, d) => {
       event.stopPropagation()
       linkGroup.selectAll('path').attr('stroke', '#C0C0C0').attr('stroke-width', 1.5)
       linkLabelBg.attr('fill', 'rgba(255,255,255,0.95)')
       linkLabels.attr('fill', '#666')
-      // Highlight corresponding edge
+      // 高亮对应的边
       link.filter(l => l === d).attr('stroke', '#3498db').attr('stroke-width', 3)
       d3.select(event.target).attr('fill', 'rgba(52, 152, 219, 0.1)')
       
@@ -631,7 +633,7 @@ const renderGraph = () => {
       linkGroup.selectAll('path').attr('stroke', '#C0C0C0').attr('stroke-width', 1.5)
       linkLabelBg.attr('fill', 'rgba(255,255,255,0.95)')
       linkLabels.attr('fill', '#666')
-      // Highlight corresponding edge
+      // 高亮对应的边
       link.filter(l => l === d).attr('stroke', '#3498db').attr('stroke-width', 3)
       d3.select(event.target).attr('fill', '#3498db')
       
@@ -641,7 +643,7 @@ const renderGraph = () => {
       }
     })
   
-  // Store references for external visibility control
+  // 保存引用供外部控制显隐
   linkLabelsRef = linkLabels
   linkLabelBgRef = linkLabelBg
 
@@ -659,7 +661,7 @@ const renderGraph = () => {
     .style('cursor', 'pointer')
     .call(d3.drag()
       .on('start', (event, d) => {
-        // Only record position, don't restart simulation (differentiate click and drag)
+        // 只记录位置，不重启仿真（区分点击和拖拽）
         d.fx = d.x
         d.fy = d.y
         d._dragStartX = event.x
@@ -667,13 +669,13 @@ const renderGraph = () => {
         d._isDragging = false
       })
       .on('drag', (event, d) => {
-        // Detect if truly dragging started (moved beyond threshold)
+        // 检测是否真正开始拖拽（移动超过阈值）
         const dx = event.x - d._dragStartX
         const dy = event.y - d._dragStartY
         const distance = Math.sqrt(dx * dx + dy * dy)
         
         if (!d._isDragging && distance > 3) {
-          // First time detecting real drag, restart simulation
+          // 首次检测到真正拖拽，才重启仿真
           d._isDragging = true
           simulation.alphaTarget(0.3).restart()
         }
@@ -684,7 +686,7 @@ const renderGraph = () => {
         }
       })
       .on('end', (event, d) => {
-        // Only gradually stop simulation if actually dragged
+        // 只有真正拖拽过才让仿真逐渐停止
         if (d._isDragging) {
           simulation.alphaTarget(0)
         }
@@ -695,12 +697,12 @@ const renderGraph = () => {
     )
     .on('click', (event, d) => {
       event.stopPropagation()
-      // Reset all node styles
+      // 重置所有节点样式
       node.attr('stroke', '#fff').attr('stroke-width', 2.5)
       linkGroup.selectAll('path').attr('stroke', '#C0C0C0').attr('stroke-width', 1.5)
-      // Highlight selected node
+      // 高亮选中节点
       d3.select(event.target).attr('stroke', '#E91E63').attr('stroke-width', 4)
-      // Highlight edges connected to this node
+      // 高亮与此节点相连的边
       link.filter(l => l.source.id === d.id || l.target.id === d.id)
         .attr('stroke', '#E91E63')
         .attr('stroke-width', 2.5)
@@ -737,16 +739,16 @@ const renderGraph = () => {
     .style('font-family', 'system-ui, sans-serif')
 
   simulation.on('tick', () => {
-    // Update curved paths
+    // 更新曲线路径
     link.attr('d', d => getLinkPath(d))
     
-    // Update edge label positions (no rotation, horizontal is clearer)
+    // 更新边标签位置（无旋转，水平显示更清晰）
     linkLabels.each(function(d) {
       const mid = getLinkMidpoint(d)
       d3.select(this)
         .attr('x', mid.x)
         .attr('y', mid.y)
-        .attr('transform', '') // Remove rotation, keep horizontal
+        .attr('transform', '') // 移除旋转，保持水平
     })
     
     // 更新边标签背景
@@ -759,7 +761,7 @@ const renderGraph = () => {
         .attr('y', mid.y - bbox.height / 2 - 2)
         .attr('width', bbox.width + 8)
         .attr('height', bbox.height + 4)
-        .attr('transform', '') // Remove rotation
+        .attr('transform', '') // 移除旋转
     })
 
     node
@@ -771,7 +773,7 @@ const renderGraph = () => {
       .attr('y', d => d.y)
   })
   
-  // Click on empty area to close detail panel
+  // 点击空白处关闭详情面板
   svg.on('click', () => {
     selectedItem.value = null
     node.attr('stroke', '#fff').attr('stroke-width', 2.5)
@@ -785,7 +787,7 @@ watch(() => props.graphData, () => {
   nextTick(renderGraph)
 }, { deep: true })
 
-// Watch edge labels toggle switch
+// 监听边标签显示开关
 watch(showEdgeLabels, (newVal) => {
   if (linkLabelsRef) {
     linkLabelsRef.style('display', newVal ? 'block' : 'none')
@@ -1248,7 +1250,7 @@ input:checked + .slider:before {
   50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 8px rgba(76, 175, 80, 0.6)); }
 }
 
-/* Post-simulation hint styles */
+/* 模拟结束后的提示样式 */
 .graph-building-hint.finished-hint {
   background: rgba(0, 0, 0, 0.65);
   border: 1px solid rgba(255, 255, 255, 0.1);

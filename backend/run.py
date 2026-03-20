@@ -1,21 +1,21 @@
 """
-MiroFish Backend Entry Point
+MiroFish Backend 启动入口
 """
 
 import os
 import sys
 
-# Fix Windows console Chinese encoding issues: set UTF-8 before any imports
+# 解决 Windows 控制台中文乱码问题：在所有导入之前设置 UTF-8 编码
 if sys.platform == 'win32':
-    # Set environment variable to ensure Python uses UTF-8
+    # 设置环境变量确保 Python 使用 UTF-8
     os.environ.setdefault('PYTHONIOENCODING', 'utf-8')
-    # Reconfigure stdout/stderr to UTF-8
+    # 重新配置标准输出流为 UTF-8
     if hasattr(sys.stdout, 'reconfigure'):
         sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     if hasattr(sys.stderr, 'reconfigure'):
         sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
-# Add project root to path
+# 添加项目根目录到路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from app import create_app
@@ -23,27 +23,27 @@ from app.config import Config
 
 
 def main():
-    """Main function"""
-    # Validate config
+    """主函数"""
+    # 验证配置
     errors = Config.validate()
     if errors:
-        print("Config errors:")
+        print("配置错误:")
         for err in errors:
             print(f"  - {err}")
-        print("\nPlease check the configuration in .env file")
+        print("\n请检查 .env 文件中的配置")
         sys.exit(1)
 
-    # Create app (with SocketIO)
+    # 创建应用（包含 SocketIO）
     result = create_app()
     app = result[0] if isinstance(result, tuple) else result
     socketio = result[1] if isinstance(result, tuple) else None
 
-    # Get runtime config
+    # 获取运行配置
     host = os.environ.get('FLASK_HOST', '0.0.0.0')
     port = int(os.environ.get('FLASK_PORT', 5001))
     debug = Config.DEBUG
 
-    # Start service (use SocketIO if available)
+    # 启动服务（使用 SocketIO 如果可用）
     if socketio:
         socketio.run(app, host=host, port=port, debug=debug, allow_unsafe_werkzeug=True)
     else:
@@ -52,3 +52,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

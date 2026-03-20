@@ -46,7 +46,7 @@
         />
       </div>
 
-      <!-- Right Panel: Step2 Environment Setup -->
+      <!-- Right Panel: Step2 环境搭建 -->
       <div class="panel-wrapper right" :style="rightPanelStyle">
         <Step2EnvSetup
           :simulationId="currentSimulationId"

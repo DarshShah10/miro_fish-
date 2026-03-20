@@ -1,7 +1,7 @@
 <template>
   <div class="env-setup-panel">
     <div class="scroll-container">
-      <!-- Step 01: Simulation Instance -->
+      <!-- Step 01: 模拟实例 -->
       <div class="step-card" :class="{ 'active': phase === 0, 'completed': phase > 0 }">
         <div class="card-header">
           <div class="step-info">
@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <!-- Step 02: Generate Agent Personas -->
+      <!-- Step 02: 生成 Agent 人设 -->
       <div class="step-card" :class="{ 'active': phase === 1, 'completed': phase > 1 }">
         <div class="card-header">
           <div class="step-info">
@@ -113,7 +113,7 @@
         </div>
       </div>
 
-      <!-- Step 03: Generate Dual-Platform Simulation Config -->
+      <!-- Step 03: 生成双平台模拟配置 -->
       <div class="step-card" :class="{ 'active': phase === 2, 'completed': phase > 2 }">
         <div class="card-header">
           <div class="step-info">
@@ -135,7 +135,7 @@
           
           <!-- Config Preview -->
           <div v-if="simulationConfig" class="config-detail-panel">
-            <!-- Time Configuration -->
+            <!-- 时间配置 -->
             <div class="config-block">
               <div class="config-grid">
                 <div class="config-item">
@@ -179,7 +179,7 @@
               </div>
             </div>
 
-            <!-- Agent Configuration -->
+            <!-- Agent 配置 -->
             <div class="config-block">
               <div class="config-block-header">
                 <span class="config-block-title">Unit Configurations</span>
@@ -264,62 +264,62 @@
               </div>
             </div>
 
-            <!-- Platform Configuration -->
+            <!-- 平台配置 -->
             <div class="config-block">
               <div class="config-block-header">
-                <span class="config-block-title">Recommendation Algorithm Configuration</span>
+                <span class="config-block-title">推荐算法配置</span>
               </div>
               <div class="platforms-grid">
                 <div v-if="simulationConfig.twitter_config" class="platform-card">
                   <div class="platform-card-header">
-                    <span class="platform-name">Platform 1: Public Feed / Timeline</span>
+                    <span class="platform-name">平台 1：广场 / 信息流</span>
                   </div>
                   <div class="platform-params">
                     <div class="param-row">
-                      <span class="param-label">Recency Weight</span>
+                      <span class="param-label">时效权重</span>
                       <span class="param-value">{{ simulationConfig.twitter_config.recency_weight }}</span>
                     </div>
                     <div class="param-row">
-                      <span class="param-label">Popularity Weight</span>
+                      <span class="param-label">热度权重</span>
                       <span class="param-value">{{ simulationConfig.twitter_config.popularity_weight }}</span>
                     </div>
                     <div class="param-row">
-                      <span class="param-label">Relevance Weight</span>
+                      <span class="param-label">相关性权重</span>
                       <span class="param-value">{{ simulationConfig.twitter_config.relevance_weight }}</span>
                     </div>
                     <div class="param-row">
-                      <span class="param-label">Viral Threshold</span>
+                      <span class="param-label">病毒阈值</span>
                       <span class="param-value">{{ simulationConfig.twitter_config.viral_threshold }}</span>
                     </div>
                     <div class="param-row">
-                      <span class="param-label">Echo Chamber Strength</span>
+                      <span class="param-label">回音室强度</span>
                       <span class="param-value">{{ simulationConfig.twitter_config.echo_chamber_strength }}</span>
                     </div>
                   </div>
                 </div>
                 <div v-if="simulationConfig.reddit_config" class="platform-card">
                   <div class="platform-card-header">
-                    <span class="platform-name">Platform 2: Topics / Community</span>
+                    <span class="platform-name">平台 2：话题 / 社区</span>
                   </div>
                   <div class="platform-params">
                     <div class="param-row">
-                      <span class="param-label">Recency Weight</span>
+                      <span class="param-label">时效权重</span>
                       <span class="param-value">{{ simulationConfig.reddit_config.recency_weight }}</span>
                     </div>
                     <div class="param-row">
-                      <span class="param-label">Popularity Weight</span>
+                      <span class="param-label">热度权重</span>
                       <span class="param-value">{{ simulationConfig.reddit_config.popularity_weight }}</span>
                     </div>
                     <div class="param-row">
-                      <span class="param-label">Relevance Weight</span>
+                      <span class="param-label">相关性权重</span>
                       <span class="param-value">{{ simulationConfig.reddit_config.relevance_weight }}</span>
                     </div>
                     <div class="param-row">
-                      <span class="param-label">Viral Threshold</span>
+                      <span class="param-label">病毒阈值</span>
                       <span class="param-value">{{ simulationConfig.reddit_config.viral_threshold }}</span>
                     </div>
                     <div class="param-row">
-                      <span class="param-label">Echo Chamber Strength</span>
+                      <span class="param-label">回音室强度</span>
                       <span class="param-value">{{ simulationConfig.reddit_config.echo_chamber_strength }}</span>
                     </div>
                   </div>
@@ -327,7 +327,7 @@
               </div>
             </div>
 
-            <!-- LLM Configuration Reasoning -->
+            <!-- LLM 配置推理 -->
             <div v-if="simulationConfig.generation_reasoning" class="config-block">
               <div class="config-block-header">
                 <span class="config-block-title">LLM 配置推理</span>
@@ -346,7 +346,7 @@
         </div>
       </div>
 
-      <!-- Step 04: Initial Activation Orchestration -->
+      <!-- Step 04: 初始激活编排 -->
       <div class="step-card" :class="{ 'active': phase === 3, 'completed': phase > 3 }">
         <div class="card-header">
           <div class="step-info">
@@ -418,7 +418,7 @@
         </div>
       </div>
 
-      <!-- Step 05: Setup Complete -->
+      <!-- Step 05: 准备完成 -->
       <div class="step-card" :class="{ 'active': phase === 4 }">
         <div class="card-header">
           <div class="step-info">
@@ -435,7 +435,7 @@
           <p class="api-note">POST /api/simulation/start</p>
           <p class="description">模拟环境已准备完成，可以开始运行模拟</p>
           
-          <!-- Simulation rounds config - only show when config is generated and rounds are calculated -->
+          <!-- 模拟轮数配置 - 只有在配置生成完成且轮数计算出来后才显示 -->
           <div v-if="simulationConfig && autoGeneratedRounds" class="rounds-config-section">
             <div class="rounds-header">
               <div class="header-left">
@@ -642,7 +642,7 @@ import {
 } from '../api/simulation'
 
 const props = defineProps({
-  simulationId: String,  // Passed from parent component
+  simulationId: String,  // 从父组件传入
   projectData: Object,
   graphData: Object,
   systemLogs: Array
@@ -651,7 +651,7 @@ const props = defineProps({
 const emit = defineEmits(['go-back', 'next-step', 'add-log', 'update-status'])
 
 // State
-const phase = ref(0) // 0: initializing, 1: generating personas, 2: generating config, 3: complete
+const phase = ref(0) // 0: 初始化, 1: 生成人设, 2: 生成配置, 3: 完成
 const taskId = ref(null)
 const prepareProgress = ref(0)
 const currentStage = ref('')
@@ -663,43 +663,43 @@ const simulationConfig = ref(null)
 const selectedProfile = ref(null)
 const showProfilesDetail = ref(true)
 
-// Log deduplication: track last output key information
+// 日志去重：记录上一次输出的关键信息
 let lastLoggedMessage = ''
 let lastLoggedProfileCount = 0
 let lastLoggedConfigStage = ''
 
-// Simulation rounds config
-const useCustomRounds = ref(false) // Default to auto-configured rounds
-const customMaxRounds = ref(40)   // Default recommended 40 rounds
+// 模拟轮数配置
+const useCustomRounds = ref(false) // 默认使用自动配置轮数
+const customMaxRounds = ref(40)   // 默认推荐40轮
 
 // Watch stage to update phase
 watch(currentStage, (newStage) => {
-  if (newStage === 'generating_profiles') {
+  if (newStage === '生成Agent人设' || newStage === 'generating_profiles') {
     phase.value = 1
-  } else if (newStage === 'generating_config') {
+  } else if (newStage === '生成模拟配置' || newStage === 'generating_config') {
     phase.value = 2
-    // Enter config generation phase, start polling config
+    // 进入配置生成阶段，开始轮询配置
     if (!configTimer) {
       addLog('Generating dual-network simulation config...')
       startConfigPolling()
     }
-  } else if (newStage === 'copying_scripts') {
-    phase.value = 2 // Still part of config phase
+  } else if (newStage === '准备模拟脚本' || newStage === 'copying_scripts') {
+    phase.value = 2 // 仍属于配置阶段
   }
 })
 
-// Calculate auto-generated rounds from config (no hardcoded defaults)
+// 从配置中计算自动生成的轮数（不使用硬编码默认值）
 const autoGeneratedRounds = computed(() => {
   if (!simulationConfig.value?.time_config) {
-    return null // Return null if config not generated
+    return null // 配置未生成时返回 null
   }
   const totalHours = simulationConfig.value.time_config.total_simulation_hours
   const minutesPerRound = simulationConfig.value.time_config.minutes_per_round
   if (!totalHours || !minutesPerRound) {
-    return null // Return null if config data incomplete
+    return null // 配置数据不完整时返回 null
   }
   const calculatedRounds = Math.floor((totalHours * 60) / minutesPerRound)
-  // Ensure max rounds not less than 40 (recommended value) to avoid slider range issues
+  // 确保最大轮数不小于40（推荐值），避免滑动条范围异常
   return Math.max(calculatedRounds, 40)
 })
 
@@ -716,7 +716,7 @@ const displayProfiles = computed(() => {
   return profiles.value.slice(0, 6)
 })
 
-// Get username by agent_id
+// 根据agent_id获取对应的username
 const getAgentUsername = (agentId) => {
   if (profiles.value && profiles.value.length > agentId && agentId >= 0) {
     const profile = profiles.value[agentId]
@@ -725,7 +725,7 @@ const getAgentUsername = (agentId) => {
   return `agent_${agentId}`
 }
 
-// Calculate total related topics count for all personas
+// 计算所有人设的关联话题总数
 const totalTopicsCount = computed(() => {
   return profiles.value.reduce((sum, p) => {
     return sum + (p.interested_topics?.length || 0)
@@ -737,9 +737,9 @@ const addLog = (msg) => {
   emit('add-log', msg)
 }
 
-// Handle start simulation button click
+// 处理开始模拟按钮点击
 const handleStartSimulation = () => {
-  // Build parameters to pass to parent component
+  // 构建传递给父组件的参数
   const params = {}
   
   if (useCustomRounds.value) {
@@ -765,7 +765,7 @@ const selectProfile = (profile) => {
   selectedProfile.value = profile
 }
 
-// Auto-start simulation preparation
+// 自动开始准备模拟
 const startPrepareSimulation = async () => {
   if (!props.simulationId) {
     addLog('Error: missing simulationId')
@@ -773,7 +773,7 @@ const startPrepareSimulation = async () => {
     return
   }
   
-  // Mark first step complete, start second step
+  // 标记第一步完成，开始第二步
   phase.value = 1
   addLog(`Simulation instance created: ${props.simulationId}`)
   addLog('Preparing simulation environment...')
@@ -807,9 +807,9 @@ const startPrepareSimulation = async () => {
       }
 
       addLog('Polling preparation progress...')
-      // Start polling progress
+      // 开始轮询进度
       startPolling()
-      // Start fetching Profiles in real-time
+      // 开始实时获取 Profiles
       startProfilesPolling()
     } else {
       addLog(`Preparation failed: ${res.error || 'Unknown error'}`)
@@ -914,19 +914,19 @@ const fetchProfilesRealtime = async () => {
     if (res.success && res.data) {
       const prevCount = profiles.value.length
       profiles.value = res.data.profiles || []
-      // Only update when API returns valid value, avoid overwriting existing valid value
+      // 只有当 API 返回有效值时才更新，避免覆盖已有的有效值
       if (res.data.total_expected) {
         expectedTotal.value = res.data.total_expected
       }
       
-      // Extract entity types
+      // 提取实体类型
       const types = new Set()
       profiles.value.forEach(p => {
         if (p.entity_type) types.add(p.entity_type)
       })
       entityTypes.value = Array.from(types)
       
-      // Output Profile generation progress log (only when count changes)
+      // 输出 Profile 生成进度日志（仅当数量变化时）
       const currentCount = profiles.value.length
       if (currentCount > 0 && currentCount !== lastLoggedProfileCount) {
         lastLoggedProfileCount = currentCount
@@ -949,7 +949,7 @@ const fetchProfilesRealtime = async () => {
   }
 }
 
-// Config polling
+// 配置轮询
 const startConfigPolling = () => {
   configTimer = setInterval(fetchConfigRealtime, 2000)
 }
@@ -1050,7 +1050,7 @@ const loadPreparedData = async () => {
       }
     }
   } catch (err) {
-    addLog(`Failed to load config: ${err.message}`)
+    addLog(`加载配置失败: ${err.message}`)
     emit('update-status', 'error')
   }
 }
@@ -1066,9 +1066,9 @@ watch(() => props.systemLogs?.length, () => {
 })
 
 onMounted(() => {
-  // Auto-start preparation process
+  // 自动开始准备流程
   if (props.simulationId) {
-    addLog('Step2 Environment Setup Initialized')
+    addLog('Step2 环境搭建初始化')
     startPrepareSimulation()
   }
 })

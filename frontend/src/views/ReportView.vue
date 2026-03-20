@@ -47,7 +47,7 @@
         />
       </div>
 
-      <!-- Right Panel: Step4 Report Generation -->
+      <!-- Right Panel: Step4 报告生成 -->
       <div class="panel-wrapper right" :style="rightPanelStyle">
         <Step4Report
           :reportId="currentReportId"
@@ -78,7 +78,7 @@ const props = defineProps({
   reportId: String
 })
 
-// Layout State - Default to workbench view
+// Layout State - 默认切换到工作台视角
 const viewMode = ref('workbench')
 
 // Data State

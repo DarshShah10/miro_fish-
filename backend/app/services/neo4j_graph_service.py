@@ -1,6 +1,6 @@
 """
 Neo4j Graph Service
-Uses Neo4j Aura as the graph database, replacing Zep Cloud
+使用 Neo4j Aura 作为图数据库，替代 Zep Cloud
 """
 
 import os
@@ -38,7 +38,7 @@ class GraphInfo:
 class Neo4jGraphService:
     """
     Neo4j Graph Service.
-    Uses Neo4j Aura to build and manage knowledge graphs.
+    使用 Neo4j Aura 构建和管理知识图谱。
     """
 
     def __init__(self, uri: str = None, username: str = None, password: str = None):
@@ -57,12 +57,12 @@ class Neo4jGraphService:
         )
 
     def close(self):
-        """Close connection"""
+        """关闭连接"""
         if self.driver:
             self.driver.close()
 
     def verify_connection(self) -> bool:
-        """Verify connection"""
+        """验证连接"""
         try:
             with self.driver.session(database=self.database) as session:
                 result = session.run("RETURN 1 AS test")
@@ -73,7 +73,7 @@ class Neo4jGraphService:
             return False
 
     def create_graph(self, name: str) -> str:
-        """Create graph (creates a project label)"""
+        """创建图谱（实际上是创建一个项目标签）"""
         graph_id = f"mirofish_{uuid.uuid4().hex[:16]}"
 
         with self.driver.session(database=self.database) as session:
@@ -93,7 +93,7 @@ class Neo4jGraphService:
         return graph_id
 
     def delete_graph(self, graph_id: str):
-        """Delete graph"""
+        """删除图谱"""
         with self.driver.session(database=self.database) as session:
             # 删除所有关联的节点和关系
             session.run(
@@ -105,7 +105,7 @@ class Neo4jGraphService:
             )
 
     def set_ontology(self, graph_id: str, ontology: Dict[str, Any]):
-        """Set ontology (stores entity and relation type definitions)
+        """设置本体（存储实体和关系类型定义）
 
         Neo4j only supports primitive types as properties, so we store as JSON strings.
         """
@@ -130,7 +130,7 @@ class Neo4jGraphService:
             )
 
     def get_ontology(self, graph_id: str) -> Optional[Dict[str, Any]]:
-        """Get ontology definition"""
+        """获取本体定义"""
         import json
 
         with self.driver.session(database=self.database) as session:
@@ -222,8 +222,8 @@ class Neo4jGraphService:
         relation_types: List[str]
     ) -> tuple:
         """
-        Extract entities and relations from text using LLM
-        Returns (entities, relations) tuple
+        使用 LLM 提取文本中的实体和关系
+        返回 (entities, relations) 元组
         """
         from ..utils.llm_client import LLMClient
 
@@ -277,7 +277,7 @@ class Neo4jGraphService:
         entities: List[Dict],
         relations: List[Dict]
     ):
-        """Store entities and relations to Neo4j"""
+        """将实体和关系存储到 Neo4j"""
         with self.driver.session(database=self.database) as session:
             # 清理关系类型名称中的非法字符
             def clean_rel_type(rel_type: str) -> str:
@@ -385,7 +385,7 @@ class Neo4jGraphService:
         chunk_overlap: int = 50,
         batch_size: int = 3,
     ) -> str:
-        """Build graph asynchronously"""
+        """异步构建图谱"""
         task_id = self.task_manager.create_task(
             task_type="graph_build",
             metadata={
@@ -414,7 +414,7 @@ class Neo4jGraphService:
         chunk_overlap: int,
         batch_size: int,
     ):
-        """Graph build worker thread"""
+        """图谱构建工作线程"""
         try:
             self.task_manager.update_task(
                 task_id,
@@ -489,7 +489,7 @@ class Neo4jGraphService:
             self.task_manager.fail_task(task_id, error_msg)
 
     def _get_graph_info(self, graph_id: str) -> GraphInfo:
-        """Get graph statistics"""
+        """获取图谱统计信息"""
         with self.driver.session(database=self.database) as session:
             # 统计实体数量
             node_result = session.run(
@@ -524,7 +524,7 @@ class Neo4jGraphService:
             )
 
     def get_graph_data(self, graph_id: str) -> Dict[str, Any]:
-        """Get complete graph data"""
+        """获取完整图谱数据"""
         with self.driver.session(database=self.database) as session:
             # 获取所有实体节点
             nodes_result = session.run(

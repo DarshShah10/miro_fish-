@@ -1,12 +1,12 @@
 """
-MiroFish Backend - Flask Application Factory
+MiroFish Backend - Flask应用工厂
 """
 
 import os
 import warnings
 
-# Suppress multiprocessing resource_tracker warnings (from third-party libraries like transformers)
-# Must be set before all other imports
+# 抑制 multiprocessing resource_tracker 的警告（来自第三方库如 transformers）
+# 需要在所有其他导入之前设置
 warnings.filterwarnings("ignore", message=".*resource_tracker.*")
 
 from flask import Flask, request
@@ -21,45 +21,45 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    # Set JSON encoding: ensure Chinese displays directly (instead of \uXXXX format)
-    # Flask >= 2.3 uses app.json.ensure_ascii, older versions use JSON_AS_ASCII config
+    # 设置JSON编码：确保中文直接显示（而不是 \uXXXX 格式）
+    # Flask >= 2.3 使用 app.json.ensure_ascii，旧版本使用 JSON_AS_ASCII 配置
     if hasattr(app, 'json') and hasattr(app.json, 'ensure_ascii'):
         app.json.ensure_ascii = False
 
-    # Set up logging
+    # 设置日志
     logger = setup_logger('mirofish')
 
-    # Only print startup info in reloader subprocess (avoid printing twice in debug mode)
+    # 只在 reloader 子进程中打印启动信息（避免 debug 模式下打印两次）
     is_reloader_process = os.environ.get('WERKZEUG_RUN_MAIN') == 'true'
     debug_mode = app.config.get('DEBUG', False)
     should_log_startup = not debug_mode or is_reloader_process
 
     if should_log_startup:
         logger.info("=" * 50)
-        logger.info("MiroFish Backend Starting...")
+        logger.info("MiroFish Backend 启动中...")
         logger.info("=" * 50)
 
     # 启用CORS
     CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-    # Register simulation process cleanup function (ensures all simulation processes terminate when server closes)
+    # 注册模拟进程清理函数（确保服务器关闭时终止所有模拟进程）
     from .services.simulation_runner import SimulationRunner
     SimulationRunner.register_cleanup()
     if should_log_startup:
-        logger.info("Registered simulation process cleanup function")
+        logger.info("已注册模拟进程清理函数")
 
     # 请求日志中间件
     @app.before_request
     def log_request():
         logger = get_logger('mirofish.request')
-        logger.debug(f"Request: {request.method} {request.path}")
+        logger.debug(f"请求: {request.method} {request.path}")
         if request.content_type and 'json' in request.content_type:
-            logger.debug(f"Request body: {request.get_json(silent=True)}")
+            logger.debug(f"请求体: {request.get_json(silent=True)}")
 
     @app.after_request
     def log_response(response):
         logger = get_logger('mirofish.request')
-        logger.debug(f"Response: {response.status_code}")
+        logger.debug(f"响应: {response.status_code}")
         return response
 
     # 注册蓝图
@@ -72,10 +72,10 @@ def create_app(config_class=Config):
     app.register_blueprint(emergency_bp, url_prefix='/api/emergency')
     app.register_blueprint(emergency_sim_bp, url_prefix='/api/v1')
 
-    # Initialize SocketIO
+    # 初始化 SocketIO
     socketio = init_socketio(app)
     if should_log_startup:
-        logger.info("SocketIO initialized")
+        logger.info("SocketIO 已初始化")
 
     # 健康检查
     @app.route('/health')
@@ -83,7 +83,7 @@ def create_app(config_class=Config):
         return {'status': 'ok', 'service': 'MiroFish Backend'}
 
     if should_log_startup:
-        logger.info("MiroFish Backend Started")
+        logger.info("MiroFish Backend 启动完成")
 
     return app, socketio
 

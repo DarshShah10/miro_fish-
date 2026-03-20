@@ -78,7 +78,7 @@ const props = defineProps({
   reportId: String
 })
 
-// Layout State - Default to workbench view
+// Layout State - 默认切换到工作台视角
 const viewMode = ref('workbench')
 
 // Data State
