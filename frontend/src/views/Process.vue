@@ -482,7 +482,10 @@ const goHome = () => {
 
 const goToNextStep = () => {
   // TODO: Enter environment setup step
-  alert('Environment setup feature is under development...')
+  router.push({
+    name: 'Simulation',
+    params: { projectId: currentProjectId.value }
+  })
 }
 
 const toggleFullScreen = () => {

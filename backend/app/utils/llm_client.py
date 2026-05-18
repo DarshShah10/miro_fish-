@@ -1,7 +1,7 @@
 import re
 import json
 from typing import List, Dict, Any, Optional
-from .retry import with_retry
+from .retry import retry_with_backoff
 
 
 class LLMClient:
@@ -19,7 +19,7 @@ class LLMClient:
         self.model = model
         self.timeout = timeout
     
-    @with_retry(max_attempts=3, delay=1.0)
+    @retry_with_backoff(max_retries=3, initial_delay=1.0)
     def chat(
         self,
         messages: List[Dict[str, str]],
